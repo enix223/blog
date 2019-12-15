@@ -1,4 +1,6 @@
-# 1. 搭建本地服务器
+# 微信小程序开发系列 - 本地服务调试技巧
+
+## 1. 搭建本地服务器
 
 当我们开发微信小程序的时候，需要访问后台API接口，我们往往需要在微信小程序的后台添加授权的服务器地址，但是我们又未必想立刻把后端程序部署到服务器上。
 我们更希望在开发阶段，可以通过本地服务器来快速调试小程序。这样后端程序可以快速的调试并修改。
@@ -8,7 +10,7 @@
 
 因为微信小程序强制使用https来访问后端接口，所以我们必须要搭建一个支持ssl的web服务器。
 
-## 1.1 域名解析
+### 1.1 域名解析
 
 通过修改本机的hosts文件，我们可以把域名直接映射到我们的后端服务器的IP地址，从而把请求流量引流到我们的本地服务器。
 
@@ -17,7 +19,7 @@
 192.168.1.100 api.enixyu.com
 ```
 
-## 1.2 HTTPS服务器
+### 1.2 HTTPS服务器
 域名解析的问题解决后，接下来就是`https`的问题。搭建https web服务器，我们可以借助nginx实现反向代理把请求转发到后端服务器上，并通过配置ssl证书，实现https的支持。
 为了方便搭建nginx服务器，我们可以使用docker容器，免去环境配置，依赖安装等问题。此处我们使用的是[enix223/awesome-nginx](https://hub.docker.com/r/enix223/awesome-nginx) docker image。
 
@@ -87,20 +89,20 @@ server {
 
 ```
 docker run -it -d \
-		-p 8000:8000 \
-		--name example-nginx \
-    -v $PWD/nginx/certs/:/etc/nginx/certs/ \
-    -v $PWD/nginx/conf.d:/etc/nginx/conf.d/ \
-		enix223/awesome-nginx:alpine
+  -p 8000:8000 \
+  --name example-nginx \
+  -v $PWD/nginx/certs/:/etc/nginx/certs/ \
+  -v $PWD/nginx/conf.d:/etc/nginx/conf.d/ \
+  enix223/awesome-nginx:alpine
 ```
 
 创建nginx的container后，本地服务器的配置基本完成。我们可以通过微信开发者工具进行开发，调用后台服务就如正式环境一样。
 
-# 2. 真机调试
+## 2. 真机调试
 
 有时候本地调试未必能满足我们的需求，真机调试必不可少。但是我们在手机上调试，往往无法直接修改手机的hosts文件，这时候，我们需要一个http代理服务器，帮我们把后端请求的流量转发到本地服务器上。
 
-## 2.1 创建squid代理服务器
+### 2.1 创建squid代理服务器
 
 在linux世界里，http代理服务器最出名的就数squid。但是我们又希望可以像nginx一样，可以通过docker容器实现快速的部署。
 幸好，squid也有很多docker image，此处我们使用[sameersbn/squid](https://hub.docker.com/r/sameersbn/squid) image。可通过如下命令创建squid的container：
@@ -126,7 +128,8 @@ hosts文件修改如下:
 192.168.1.100 api.enixyu.com
 ```
 
-## 2.2 手机使用代理服务器
+### 2.2 手机使用代理服务器
+
 完成了以上的配置后，最后一步就是配置手机的代理服务器。假如运行squid容器的主机IP为`192.168.1.100`，则http的代理设置如下所示：
 ```
 服务器 192.168.1.100
