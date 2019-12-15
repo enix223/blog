@@ -89,11 +89,11 @@ server {
 
 ```
 docker run -it -d \
-  -p 8000:8000 \
-  --name example-nginx \
-  -v $PWD/nginx/certs/:/etc/nginx/certs/ \
-  -v $PWD/nginx/conf.d:/etc/nginx/conf.d/ \
-  enix223/awesome-nginx:alpine
+    -p 8000:8000 \
+    --name example-nginx \
+    -v $PWD/nginx/certs/:/etc/nginx/certs/ \
+    -v $PWD/nginx/conf.d:/etc/nginx/conf.d/ \
+    enix223/awesome-nginx:alpine
 ```
 
 创建nginx的container后，本地服务器的配置基本完成。我们可以通过微信开发者工具进行开发，调用后台服务就如正式环境一样。
@@ -109,10 +109,10 @@ docker run -it -d \
 
 ```
 docker run --name squid -d \
-        --publish 3128:3128 \
-		--volume $PWD/squid/conf/squid.conf:/etc/squid/squid.conf \
-		--volume $PWD/squid/conf/hosts:/etc/hosts \
-		sameersbn/squid:latest
+    --publish 3128:3128 \
+    --volume $PWD/squid/conf/squid.conf:/etc/squid/squid.conf \
+    --volume $PWD/squid/conf/hosts:/etc/hosts \
+    sameersbn/squid:latest
 ```
 
 squid的配置文件需要注意如下几点：
